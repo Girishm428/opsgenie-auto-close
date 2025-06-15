@@ -6,10 +6,13 @@ authors = [
     {name = "Girish Reddy"}
 ]
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.13,<4"
 dependencies = [
     "requests (>=2.32.4,<3.0.0)",
-    "platformdirs (>=4.3.8,<5.0.0)"
+    "platformdirs (>=4.3.8,<5.0.0)",
+    "schedule (>=1.2.2,<2.0.0)",
+    "elasticsearch (==8.18.1)",
+    "opsgenie-sdk (>=2.1.5,<3.0.0)"
 ]
 
 

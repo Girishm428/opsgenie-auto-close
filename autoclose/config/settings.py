@@ -35,13 +35,14 @@ def ensure_settings_file():
             default_settings = {
                 "OPSGENIE_API_KEY": "",
                 "OPSGENIE_URL_BASE": "",
+                "OPSGENIE_API_INTEGRATION_KEY": "",
                 "ELASTICSEARCH_URL": "",
                 "ELASTICSEARCH_HOST": "",
                 "ELASTICSEARCH_PORT": "",
                 "ELASTICSEARCH_USERNAME": "",
                 "ELASTICSEARCH_PASSWORD": "",
                 "ELASTICSEARCH_VERIFY_CERTS": "",
-                "ELASTICSEARCH_SSL_CERTIFICATE": ""
+                "ELASTICSEARCH_SSL_SHOW_WARN": ""
             }
             try:
                 with open(SETTINGS_FILE, 'w', encoding='utf-8') as f:
@@ -67,7 +68,7 @@ def ensure_settings_file():
     except Exception as e:
         logger.error("Failed to create settings file in user config directory: %s", str(e))
         # Fallback to local directory if config directory is not accessible
-        local_settings = Path(__file__).parent.parent / "webui" / "settings.json"
+        local_settings = Path(__file__).parent.parent / "config" / "settings.json"
         logger.info("Attempting to use local settings file at: %s", local_settings)
         
         # Create webui directory if it doesn't exist
@@ -78,10 +79,16 @@ def ensure_settings_file():
         if not local_settings.exists():
             logger.info("Creating local settings file at %s", local_settings)
             default_settings = {
-                "ZENDESK_DOMAIN": "",
-                "EMAIL": "",
-                "API_TOKEN": "",
-                "LOCAL": "en-us"
+                "OPSGENIE_API_KEY": "",
+                "OPSGENIE_URL_BASE": "",
+                "OPSGENIE_API_INTEGRATION_KEY": "",
+                "ELASTICSEARCH_URL": "",
+                "ELASTICSEARCH_HOST": "",
+                "ELASTICSEARCH_PORT": "",
+                "ELASTICSEARCH_USERNAME": "",
+                "ELASTICSEARCH_PASSWORD": "",
+                "ELASTICSEARCH_VERIFY_CERTS": "",
+                "ELASTICSEARCH_SSL_SHOW_WARN": ""
             }
             with open(local_settings, 'w', encoding='utf-8') as f:
                 json.dump(default_settings, f, indent=2)
@@ -117,6 +124,10 @@ logger.info("OPSGENIE_API_KEY: %s", masked_token)
 OPSGENIE_URL_BASE = settings.get("OPSGENIE_URL_BASE", "")
 logger.info("OPSGENIE_URL_BASE: %s", OPSGENIE_URL_BASE)
 
+OPSGENIE_API_INTEGRATION_KEY = settings.get("OPSGENIE_API_INTEGRATION_KEY", "")
+masked_token = f"{OPSGENIE_API_INTEGRATION_KEY[:3]}****{OPSGENIE_API_INTEGRATION_KEY[-2:]}" if OPSGENIE_API_INTEGRATION_KEY else "(not set)"
+logger.info("OPSGENIE_API_INTEGRATION_KEY: %s", masked_token)
+
 ELASTICSEARCH_URL = settings.get("ELASTICSEARCH_URL", "")
 logger.info("ELASTICSEARCH_URL: %s", ELASTICSEARCH_URL)
 
@@ -136,12 +147,8 @@ logger.info("ELASTICSEARCH_PASSWORD: %s", masked_token)
 ELASTICSEARCH_VERIFY_CERTS = settings.get("ELASTICSEARCH_VERIFY_CERTS", "")
 logger.info("ELASTICSEARCH_VERIFY_CERTS: %s", ELASTICSEARCH_VERIFY_CERTS)
 
-ELASTICSEARCH_SSL_CERTIFICATE = settings.get("ELASTICSEARCH_SSL_CERTIFICATE", "")
-logger.info("ELASTICSEARCH_SSL_CERTIFICATE: %s", ELASTICSEARCH_SSL_CERTIFICATE)
-
-ELASTICSEARCH_PASSWORD = settings.get("ELASTICSEARCH_PASSWORD", "")
-masked_token = f"{ELASTICSEARCH_PASSWORD[:3]}****{ELASTICSEARCH_PASSWORD[-2:]}" if ELASTICSEARCH_PASSWORD else "(not set)"
-logger.info("ELASTICSEARCH_PASSWORD: %s", masked_token)
+ELASTICSEARCH_SSL_SHOW_WARN = settings.get("ELASTICSEARCH_SSL_SHOW_WARN", "")
+logger.info("ELASTICSEARCH_SSL_SHOW_WARN: %s", ELASTICSEARCH_SSL_SHOW_WARN)
 
 def validate():
     logger.info("Validating started")
