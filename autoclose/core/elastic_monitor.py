@@ -42,7 +42,7 @@ def current_cpu_usage_for_hosts(host_list):
 
     for host in host_list:
         if not host:
-            logger.warning("⚠️ Skipping None or empty hostname.")
+            logger.warning("Skipping None or empty hostname.")
             results.append(None)
             continue
 
@@ -64,13 +64,13 @@ def current_cpu_usage_for_hosts(host_list):
             hits = result["hits"]["hits"]
             if hits:
                 value = hits[0]["_source"]["system"]["load"]["norm"]["5"]
-                logger.info(f"✅ system.load.norm.5 for {host}: {value}")
+                logger.info(f"system.load.norm.5 for {host}: {value}")
                 results.append(value)
             else:
-                logger.info(f"⚠️ No data found for host {host}.")
+                logger.info(f"No data found for host {host}.")
                 results.append(None)
         except Exception as e:
-            logger.error(f"❌ Error querying Elasticsearch for {host}: {e}")
+            logger.error(f"Error querying Elasticsearch for {host}: {e}")
             results.append(None)
 
     return results

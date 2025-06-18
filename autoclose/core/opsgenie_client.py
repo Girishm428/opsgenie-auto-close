@@ -14,10 +14,10 @@ class OpsGenieClient:
         self.alert_api = opsgenie_sdk.AlertApi(api_client=self.api_client)
         logger.info("Successfully connected to OpsGenie")   
 
-    def close_alert(self, alert_id):
+    def close_alert(self, alert_id, note):
         body = opsgenie_sdk.CloseAlertPayload(
             user='AutoCloser',
-            note='Auto-closed: CPU usage normalized.',
+            note=note,
             source='python sdk'
         )
         try:
@@ -30,7 +30,7 @@ class OpsGenieClient:
     def list_alerts(self):
         query = 'status=open'
         try:
-            list_response = self.alert_api.list_alerts(limit=10, offset=0, sort='updatedAt', order='asc', search_identifier_type='name', query=query)
+            list_response = self.alert_api.list_alerts(limit=100, offset=0, sort='updatedAt', order='asc', search_identifier_type='name', query=query)
             # logger.info(list_response)
             return list_response
         except ApiException as err:

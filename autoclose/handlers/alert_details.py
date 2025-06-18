@@ -33,7 +33,7 @@ def get_alert_dict(alert_ids):
 
         return alert_details_list
     except Exception as e:
-        logger.error(f"❌ Error getting alert details: {e}")
+        logger.error(f"Error getting alert details: {e}")
         return []
 
 def get_alert_dict_details(alert_ids):
@@ -50,7 +50,7 @@ def get_alert_dict_details(alert_ids):
     
         return all_details
     except Exception as e:
-        logger.error(f"❌ Error fetching alert details: {e}")
+        logger.error(f"Error fetching alert details: {e}")
         return []
 
 def get_network_name(alert_ids):
@@ -63,7 +63,7 @@ def get_network_name(alert_ids):
             network_name.append(details.get("networkName"))
         return network_name
     except Exception as e:
-        logger.error(f"❌ Error fetching network name: {e}")
+        logger.error(f"Error fetching network name: {e}")
         return []
 
 def get_host_name(alert_ids):
@@ -76,5 +76,16 @@ def get_host_name(alert_ids):
             host_name.append(details.get("host.name"))
         return host_name
     except Exception as e:
-        logger.error(f"❌ Error fetching host name: {e}")
+        logger.error(f"Error fetching host name: {e}")
+        return []
+
+def get_alert_ids_with_tag(tag_name):
+    client = OpsGenieClient()
+    try:
+        response = client.alert_api.list_alerts(query=f'tags:"{tag_name}" AND status:open', limit=100)
+        alert_ids = [alert.id for alert in response.data]
+        logger.info(f"Found {len(alert_ids)} alerts with tag '{tag_name}'")
+        return alert_ids
+    except Exception as e:
+        logger.error(f"Error fetching alerts with tag '{tag_name}': {e}")
         return []
