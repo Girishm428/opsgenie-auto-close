@@ -3,7 +3,7 @@ import time
 from autoclose.main import main  # Replace with your actual module
 from autoclose.loggers.log_cli import setup_logger
 
-logger = setup_logger()
+logger = setup_logger(__name__)
 
 def job():
     logger.info("⏱ Running Opsgenie alert checker...")

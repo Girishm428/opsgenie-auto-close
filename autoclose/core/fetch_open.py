@@ -2,7 +2,7 @@ import requests
 from autoclose.config.settings import OPSGENIE_API_KEY, OPSGENIE_URL_BASE
 from autoclose.loggers.log_cli import setup_logger
 
-logger = setup_logger()
+logger = setup_logger(__name__)
 
 def fetch_open_alerts():
     headers = {

@@ -3,9 +3,9 @@ from autoclose.loggers.log_cli import setup_logger
 import opsgenie_sdk
 from opsgenie_sdk.rest import ApiException
 
-logger = setup_logger("autoclose.opsgenie")
+logger = setup_logger(__name__)
 
-class CloseAlert:
+class OpsGenieClient:
     def __init__(self, opsgenie_api_key=OPSGENIE_API_INTEGRATION_KEY):
         self.conf = opsgenie_sdk.configuration.Configuration()
         self.conf.api_key['Authorization'] = opsgenie_api_key
@@ -23,14 +23,31 @@ class CloseAlert:
         try:
             close_response = self.alert_api.close_alert(identifier=alert_id, close_alert_payload=body)
             logger.info(f"Closed alert {alert_id}")
-            print(close_response)
             return close_response
         except ApiException as err:
             logger.error(f"Exception when calling AlertApi->close_alert: {err}")
-            print(f"Exception: {err}")
 
+    def list_alerts(self):
+        query = 'status=open'
+        try:
+            list_response = self.alert_api.list_alerts(limit=10, offset=0, sort='updatedAt', order='asc', search_identifier_type='name', query=query)
+            # logger.info(list_response)
+            return list_response
+        except ApiException as err:
+            logger.error(f"Exception when calling AlertApi->list_alerts: {err}")
+   
+    def count_alerts(self):
+        try:
+            count_response = self.alert_api.count_alerts()
+            logger.info(count_response)
+            return count_response
+        except ApiException as err:
+            logger.error(f"Exception when calling AlertApi->count__alerts: {err}")
 
-# Run test
-# if __name__ == "__main__":
-#     client = CloseAlert()
-#     client.close_alert("9753b2b2-1c94-4fdd-ab42-a4c96fbfab97-1749993162941")
+    def get_alert(self, alert_id):
+        try:
+            get_response = self.alert_api.get_alert(identifier=alert_id, identifier_type='id')
+            # logger.info(get_response)
+            return get_response
+        except ApiException as err:
+            logger.error(f"Exception when calling AlertApi->get_alert: {err}")
