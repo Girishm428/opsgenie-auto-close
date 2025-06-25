@@ -46,7 +46,7 @@ def get_alert_dict_details(alert_ids):
             details = alert_data.get("details", {})
             logger.info(f"Details for Alert ID {alert_id}: {details}")
 
-            all_details .append(details)
+            all_details.append(details)
     
         return all_details
     except Exception as e:

@@ -16,20 +16,20 @@ RULES_FILE = CONFIG_DIR / "rules.json"
 def ensure_rules_file():
     try:
         # First check if directory exists
-        logger.info("Checking if directory exists: %s", CONFIG_DIR)
+        logger.debug("Checking if directory exists: %s", CONFIG_DIR)
         if not CONFIG_DIR.exists():
-            logger.info("Directory not found, creating: %s", CONFIG_DIR)
+            logger.debug("Directory not found, creating: %s", CONFIG_DIR)
             try:
                 CONFIG_DIR.mkdir(parents=True, exist_ok=True)
-                logger.info("Successfully created directory: %s", CONFIG_DIR)
+                logger.debug("Successfully created directory: %s", CONFIG_DIR)
             except Exception as e:
                 logger.error("Failed to create directory: %s", str(e))
                 raise
         else:
-            logger.info("Directory already exists: %s", CONFIG_DIR)
+            logger.debug("Directory already exists: %s", CONFIG_DIR)
 
         # Now check if settings file exists
-        logger.info("Checking if rules file exists: %s", RULES_FILE)
+        logger.debug("Checking if rules file exists: %s", RULES_FILE)
         if not RULES_FILE.exists():
             logger.info("Rules file not found, creating new one at: %s", RULES_FILE)
             default_settings = {
@@ -41,13 +41,13 @@ def ensure_rules_file():
                 with open(RULES_FILE, 'w', encoding='utf-8') as f:
                     json.dump(default_settings, f, indent=2)
                 logger.info("Successfully created rules file at: %s", RULES_FILE)
-                logger.info("Rules file Resolve if any: %s", RULES_FILE.resolve())
+                logger.debug("Rules file Resolve if any: %s", RULES_FILE.resolve())
             except Exception as e:
                 logger.error("Failed to create rules file: %s", str(e))
                 raise
         else:
             logger.info("Rules file already exists at: %s", RULES_FILE)
-            logger.info("Rules file Resolve if any: %s", RULES_FILE.resolve())
+            logger.debug("Rules file Resolve if any: %s", RULES_FILE.resolve())
             # Verify we can read the file
             try:
                 with open(RULES_FILE, 'r', encoding='utf-8') as f:
@@ -86,7 +86,7 @@ def ensure_rules_file():
 
 RULES_FILE = ensure_rules_file()
 
-logger.info("RULES_FILE exists: %s", RULES_FILE.exists())
+logger.debug("RULES_FILE exists: %s", RULES_FILE.exists())
 
 def load_rules():
     try:

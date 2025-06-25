@@ -3,6 +3,27 @@ import logging
 from pathlib import Path
 from autoclose.config.logfile import create_log_file
 import sys
+from platformdirs import user_config_dir
+import json
+
+APP_NAME = "OpsGenieAutoClose"
+CONFIG_DIR = Path(user_config_dir(APP_NAME, appauthor=False))  # appauthor=False prevents duplicate folder
+SETTINGS_FILE = CONFIG_DIR / "settings.json"
+
+def load_settings():
+    try:
+        if SETTINGS_FILE.exists():
+            with open(SETTINGS_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+        return {}
+    except Exception:
+        return {}
+
+
+LOG_LEVEL = load_settings().get("LOG_LEVEL")
+DRY_RUN = load_settings().get("DRY_RUN")
+
+print(f"--------------LOG_LEVEL: {LOG_LEVEL}, DRY_RUN: {DRY_RUN}---------------------")
 
 def setup_logger(name=__name__, logfile=None):
     logger = logging.getLogger(name)
@@ -14,7 +35,7 @@ def setup_logger(name=__name__, logfile=None):
         )
         handler.setFormatter(formatter)
         logger.addHandler(handler)
-        logger.setLevel(logging.INFO)
+        logger.setLevel(logging.getLevelName(LOG_LEVEL.upper()))
 
         # Use the log file from logfile.py if no specific logfile is provided
         if logfile is None:

@@ -3,6 +3,7 @@ from autoclose.core.elastic_monitor import current_cpu_usage_for_hosts
 from autoclose.loggers.log_cli import setup_logger
 from autoclose.core.opsgenie_client import OpsGenieClient
 from autoclose.config.rules import CPU_CLOUSER_NOTE, CPU_TAG_NAME
+from autoclose.config.settings import DRY_RUN
 
 logger = setup_logger(__name__)
 
@@ -27,9 +28,12 @@ def close_alerts_if_cpu_normal(threshold):
                 continue
 
             if cpu < threshold:
-                logger.info(f"CPU for host {hostname} is {cpu}, below threshold. Closing alert {alert_id}.")
-                opsgenie_client = OpsGenieClient()
-                opsgenie_client.close_alert(alert_id, CPU_CLOUSER_NOTE)
+                if DRY_RUN:
+                    logger.info(f"[DRY RUN] Would close alert {alert_id} (CPU={cpu} < {threshold}) for host {hostname}")
+                else:
+                    logger.info(f"CPU for host {hostname} is {cpu}, below threshold. Closing alert {alert_id}.")
+                    opsgenie_client = OpsGenieClient()
+                    opsgenie_client.close_alert(alert_id, CPU_CLOUSER_NOTE)
             else:
                 logger.info(f"CPU for host {hostname} is {cpu}, not closing alert {alert_id}.")
     except Exception as e:
