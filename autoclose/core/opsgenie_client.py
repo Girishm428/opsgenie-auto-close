@@ -2,6 +2,7 @@ from autoclose.config.settings import OPSGENIE_API_INTEGRATION_KEY
 from autoclose.loggers.log_cli import setup_logger
 import opsgenie_sdk
 from opsgenie_sdk.rest import ApiException
+from opsgenie_sdk import AddNoteToAlertPayload
 
 logger = setup_logger(__name__)
 
@@ -51,3 +52,12 @@ class OpsGenieClient:
             return get_response
         except ApiException as err:
             logger.error(f"Exception when calling AlertApi->get_alert: {err}")
+
+    def add_note(self, alert_id, note):
+        body = AddNoteToAlertPayload(user='AutoClose', note=note, source='python sdk')
+        try:
+            note_response = self.alert_api.add_note(identifier=alert_id, add_note_to_alert_payload=body)
+            print(note_response)
+            return note_response
+        except ApiException as err:
+            print("Exception when calling AlertApi->add note: %s\n" % err)

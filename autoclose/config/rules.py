@@ -36,6 +36,7 @@ def ensure_rules_file():
                 "CPU_THRESHOLD_TO_CLOSE": "",
                 "CPU_TAG_NAME": "",
                 "CPU_CLOUSER_NOTE": "",
+                "CPU_CLOUSER_NOTE_DRYRUN": ""
             }
             try:
                 with open(RULES_FILE, 'w', encoding='utf-8') as f:
@@ -75,6 +76,7 @@ def ensure_rules_file():
                 "CPU_THRESHOLD_TO_CLOSE": "",
                 "CPU_TAG_NAME": "",
                 "CPU_CLOUSER_NOTE": "",
+                "CPU_CLOUSER_NOTE_DRYRUN": ""
             }
             with open(local_rules, 'w', encoding='utf-8') as f:
                 json.dump(default_settings, f, indent=2)
@@ -112,6 +114,8 @@ logger.info("CPU_TAG_NAME: %s", CPU_TAG_NAME)
 CPU_CLOUSER_NOTE = rules.get("CPU_CLOUSER_NOTE", "") 
 logger.info("CPU_CLOUSER_NOTE: %s", CPU_CLOUSER_NOTE)
 
+CPU_CLOUSER_NOTE_DRYRUN = rules.get("CPU_CLOUSER_NOTE_DRYRUN", "") 
+logger.info("CPU_CLOUSER_NOTE_DRYRUN: %s", CPU_CLOUSER_NOTE_DRYRUN)
 
 def validate():
     logger.info("Validating started")
