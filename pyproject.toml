@@ -6,7 +6,7 @@ authors = [
     {name = "Girish Reddy"}
 ]
 readme = "README.md"
-requires-python = ">=3.13,<4"
+requires-python = ">=3.11,<4"
 dependencies = [
     "requests (>=2.32.4,<3.0.0)",
     "platformdirs (>=4.3.8,<5.0.0)",

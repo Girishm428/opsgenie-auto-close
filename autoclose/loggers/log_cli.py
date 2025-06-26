@@ -3,25 +3,27 @@ import logging
 from pathlib import Path
 from autoclose.config.logfile import create_log_file
 import sys
-from platformdirs import user_config_dir
-import json
+from autoclose.loggers.config_loader import get_setting
 
-APP_NAME = "OpsGenieAutoClose"
-CONFIG_DIR = Path(user_config_dir(APP_NAME, appauthor=False))  # appauthor=False prevents duplicate folder
-SETTINGS_FILE = CONFIG_DIR / "settings.json"
+LOG_LEVEL = get_setting("LOG_LEVEL", "INFO")
+DRY_RUN = get_setting("DRY_RUN", "False")
 
-def load_settings():
-    try:
-        if SETTINGS_FILE.exists():
-            with open(SETTINGS_FILE, "r", encoding="utf-8") as f:
-                return json.load(f)
-        return {}
-    except Exception:
-        return {}
+# APP_NAME = "OpsGenieAutoClose"
+# CONFIG_DIR = Path(user_config_dir(APP_NAME, appauthor=False))  # appauthor=False prevents duplicate folder
+# SETTINGS_FILE = CONFIG_DIR / "settings.json"
+
+# def load_settings():
+#     try:
+#         if SETTINGS_FILE.exists():
+#             with open(SETTINGS_FILE, "r", encoding="utf-8") as f:
+#                 return json.load(f)
+#         return {}
+#     except Exception:
+#         return {}
 
 
-LOG_LEVEL = load_settings().get("LOG_LEVEL")
-DRY_RUN = load_settings().get("DRY_RUN")
+# LOG_LEVEL = load_settings().get("LOG_LEVEL")
+# DRY_RUN = load_settings().get("DRY_RUN")
 
 print(f"--------------LOG_LEVEL: {LOG_LEVEL}, DRY_RUN: {DRY_RUN}---------------------")
 
